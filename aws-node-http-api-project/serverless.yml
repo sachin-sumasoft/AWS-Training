@@ -8,8 +8,6 @@
 #
 # For full config options, check the docs:
 #    docs.serverless.com
-#
-# Happy Coding!
 
 service: lambda-nodejs
 # app and org for use with dashboard.serverless.com
