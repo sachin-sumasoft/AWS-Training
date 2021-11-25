@@ -103,7 +103,15 @@ functions:
       - http: 
         path: newPassWord
         method: post
-        cors: true 
+        cors: true
+
+  login:
+    handler: handler.login
+    events:
+      - httpApi: 
+          path: login
+          method: post
+          cors: true          
 
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}

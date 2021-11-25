@@ -9,22 +9,18 @@ let poolData = {
 let userPool = new CognitoUserPool(poolData);
 
 
-module.exports.hello = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const { CognitoUserPool, CognitoUser } = require('amazon-cognito-identity-js')
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+let poolData = {
+    UserPoolId: "ap-south-1_IBopTt4z4", // User Pool Id
+    ClientId: "4m5nid09grkk37m4lb0bmbfm69" // Client Id
+}
+
+let userPool = new CognitoUserPool(poolData);
+
+
+
+
 
 
 
@@ -116,6 +112,68 @@ function confirmNewPassword(otp,password){
       });
   })
 }
+function handleLogIn(email,password){
+  return new Promise((resolve,reject)=>{
+    let user = new CognitoUser({
+      Username: email,
+      Pool: userPool // User Pool
+  })
+    let authDetails = new AuthenticationDetails(
+      {
+        Username : email,
+        Password : password,
+      }
+    )
+
+    user.authenticateUser(authDetails,{
+      onSuccess: (data)=>{
+        console.log("login successful",data);
+        resolve( data )
+         
+         
+      },
+      onFailure: (err)=>{
+        console.log(err);
+        reject( err )
+        
+      },
+      
+    })
+  })
+}
+
+
+
+module.exports.login = async (events)=>{
+  const userData = JSON.parse(events.body);
+  
+  try {
+      let logindata = await handleLogIn(userData.email, userData.password);
+      return {
+          statusCode: 200 ,
+          body: JSON.stringify({
+              data: logindata,
+              message:"successful",
+              input: events,
+          })
+      }  
+  } catch (error) {
+      return{
+          statusCode: error.statusCode || 500 ,
+          body: JSON.stringify({
+              data: {},
+              message:"Unsuccessful",
+              input: events,
+              errorName : error.name,
+              errorDetails : error
+          })
+      }
+  }
+}
+
+
+
+
 
 
 module.exports.getOtp = async (events)=>{
