@@ -134,7 +134,7 @@ module.exports.getOtp = async (events)=>{
       return {
           statusCode: 400,
           body: JSON.stringify({
-              message: "code send"
+              message: "code send error"
           })
       }
   }

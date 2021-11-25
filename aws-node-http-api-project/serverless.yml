@@ -79,15 +79,7 @@ functions:
       - httpApi: 
           path: create
           method: get
-          cors: true   
-
-  newPassWord:
-    handler: handler.newPassWord
-    events:
-      - http: 
-        path: newPassWord
-        method: post
-        cors: true   
+          cors: true      
         
   getOtp:
     handler: handler.getOtp
