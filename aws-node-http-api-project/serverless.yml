@@ -73,22 +73,37 @@ provider:
 #    - include-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - httpApi:
-          path: /
-          method: get
-          cors: true
-
-
   create:
     handler: handler.create
     events:
       - httpApi: 
-          path: /create
+          path: create
           method: get
-          cors: true          
+          cors: true   
+
+  newPassWord:
+    handler: handler.newPassWord
+    events:
+      - http: 
+        path: newPassWord
+        method: post
+        cors: true   
+        
+  getOtp:
+    handler: handler.getOtp
+    events:
+      - http: 
+        path: getOtp
+        method: post
+        cors: true 
+
+  newPassWord:
+    handler: handler.newPassWord
+    events:
+      - http: 
+        path: newPassWord
+        method: post
+        cors: true 
 
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}

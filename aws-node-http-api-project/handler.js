@@ -1,4 +1,12 @@
 'use strict';
+const { CognitoUserPool, CognitoUser } = require('amazon-cognito-identity-js')
+
+let poolData = {
+    UserPoolId: "ap-south-1_IBopTt4z4", // User Pool Id
+    ClientId: "4m5nid09grkk37m4lb0bmbfm69" // Client Id
+}
+
+let userPool = new CognitoUserPool(poolData);
 
 
 module.exports.hello = async (event) => {
@@ -70,9 +78,85 @@ module.exports.create = async (events)=>{
         }
     }
 }
+//charan
+
+function otp(userName){
+  return new Promise((resolve,reject)=>{
+    
+      let user = new CognitoUser({
+        Username: userName,
+        Pool: userPool // User Pool
+      })
+      user.forgotPassword({
+          onSuccess: function (data) {
+              // successfully initiated reset password request
+              console.log('CodeDeliveryData from forgotPassword: ');
+              console.log(data);
+              resolve(data)
+          },
+          onFailure: function (err) {
+              console.log(err);
+              reject(err);
+          }
+      })
+  })
+}
+
+function confirmNewPassword(otp,password){
+  return new Promise((resolve,reject)=>{
+      user.confirmPassword(otp, password, {
+          onSuccess(data) {
+              // After password is reset
+              console.log("passwaord reset");
+              resolve("password changed successfully")
+          },
+          onFailure(err) {
+              reject(err)
+          },
+      });
+  })
+}
 
 
+module.exports.getOtp = async (events)=>{
+  const userData = JSON.parse(events.body);
+  
+  try {
+      let code = await otp(userData.email);
+      console.log(code);
+      return {
+          statusCode: 200,
+          body: JSON.stringify({
+              message: "code send"
+          })
+      }
+  } catch (error) {
+      return {
+          statusCode: 400,
+          body: JSON.stringify({
+              message: "code send"
+          })
+      }
+  }
+}
 
-
-
-
+module.exports.newPassWord = async (events)=>{
+  const userData = JSON.parse(events.body);
+  try {
+      let code = await confirmNewPassword(userData.otp,userData.password);
+      console.log(code);
+      return {
+          statusCode: 200,
+          body: JSON.stringify({
+              message: "password change succfully"
+          })
+      }
+  } catch (error) {
+      return {
+          statusCode: 400,
+          body: JSON.stringify({
+              message: "code send"
+          })
+      }
+  }
+}
