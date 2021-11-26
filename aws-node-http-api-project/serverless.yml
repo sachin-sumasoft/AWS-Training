@@ -75,16 +75,21 @@ provider:
 #    - include-me-dir/**
 
 functions:
- 
-
-
   create:
     handler: handler.create
     events:
       - httpApi: 
           path: /create
           method: get
-          cors: true          
+          cors: true
+          
+  signUp:
+    handler: api/userAuth/signUp.createUser
+    events:
+    - http:
+      path: /createUser
+      method: post
+      cors: true
 
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
