@@ -97,14 +97,6 @@ functions:
         method: post
         cors: true 
 
-  newPassWord:
-    handler: handler.newPassWord
-    events:
-      - http: 
-        path: newPassWord
-        method: post
-        cors: true
-
   login:
     handler: handler.login
     events:
@@ -112,6 +104,14 @@ functions:
           path: login
           method: post
           cors: true          
+          
+  signUp:
+    handler: api/userAuth/signUp.createUser
+    events:
+    - http:
+      path: /createUser
+      method: post
+      cors: true
 
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
