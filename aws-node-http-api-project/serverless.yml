@@ -85,25 +85,34 @@ functions:
     handler: handler.getOtp
     events:
       - http: 
-        path: getOtp
-        method: post
-        cors: true 
+          path: getOtp
+          method: post
+          cors: true
 
-  login:
-    handler: handler.login
-    events:
-      - httpApi: 
+   newPassWord:
+      handler: handler.newPassWord
+      events:
+        - http: 
+          path: newPassWord
+          method: post
+          cors: true
+      
+
+    login:
+       handler: handler.login
+       events:
+        - httpApi: 
           path: login
           method: post
           cors: true          
-          
-  signUp:
-    handler: api/userAuth/signUp.createUser
-    events:
-    - http:
-      path: /createUser
-      method: post
-      cors: true
+       
+     signUp:
+       handler: handler.createUser
+       events:
+         - http:
+           path: /createUser
+           method: post
+           cors: true
 
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
