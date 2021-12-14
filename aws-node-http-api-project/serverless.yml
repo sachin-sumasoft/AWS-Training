@@ -35,7 +35,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: us-west-2
-  #profile: serverless-user1
+  profile: SumaSoft1
   lambdaHashingVersion: 20201221
 
 # you can overwrite defaults here
@@ -71,12 +71,15 @@ provider:
 #    - '!exclude-me-dir/**'
 #    - include-me.js
 #    - include-me-dir/**
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
 
 functions:
   create:
     handler: handler.create
     events:
-      - httpApi: 
+      - http: 
           path: create
           method: get
           cors: true      
@@ -85,26 +88,88 @@ functions:
     handler: handler.getOtp
     events:
       - http: 
-        path: getOtp
-        method: post
-        cors: true 
+          path: getOtp
+          method: post
+          cors: true 
 
   login:
     handler: handler.login
     events:
-      - httpApi: 
+      - http: 
           path: login
           method: post
-          cors: true          
-          
-  signUp:
-    handler: api/userAuth/signUp.createUser
+          cors: true   
+
+  newPassWord:
+    handler: handler.newPassWord
     events:
     - http:
-      path: /createUser
-      method: post
-      cors: true
-
+        path: newPassWord
+        method: post
+        cors: true
+  signUp:
+    handler: handler.createUser
+    events:
+    - http:
+        path: createUser
+        method: post
+        cors: true
+  deleteUser:
+    handler: utilities/signUp.deleteUser
+    events:
+    - http:
+        path: deleteUser
+        method: get
+        cors: true
+  resetPassword:
+    handler: handler.resetPassword
+    events:
+    - http:
+        path: resetpassword
+        method: post
+        cors: true
+  assets:
+    handler: handler.assets
+    events:
+      - http:
+          path: putassets
+          method: post
+          cors: true
+  createAssetsModel:
+    handler: handler.createAssetModel
+    events:
+      - http:
+          path: createassetmodel
+          method: post
+          cors: true
+  getassetModel:
+    handler: handler.getassetModel
+    events:
+      - http:
+          path: getassetModel
+          method: get
+          cors: true
+  sensorParts:
+    handler: handler.sensors
+    events:
+      - http:
+          path: sensors
+          method: post
+          cors: true
+  # getAssetData:
+  #   handler: handler.getAssetData
+  #   events:
+  #     - http:
+  #         path: getAssetData
+  #         method: get
+  #         cors: true
+  # delteAssetData:
+  #   handler: handler.delteAssetData
+  #   events:
+  #     - http:
+  #         path: delteAssetData
+  #         method: post
+  #         cors: true
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
