@@ -1,9 +1,9 @@
 'use strict';
-const { CognitoUserPool, CognitoUser } = require('amazon-cognito-identity-js')
+const { CognitoUserPool, CognitoUser,AuthenticationDetails} = require('amazon-cognito-identity-js')
 
 let poolData = {
-  UserPoolId: "ap-south-1_IBopTt4z4", // User Pool Id
-  ClientId: "4m5nid09grkk37m4lb0bmbfm69" // Client Id
+  UserPoolId: "ap-south-1_TId4HoBF0", // User Pool Id
+  ClientId: "3k45ogjaqdugkrlb330ccrhbd6" // Client Id
 }
 
 let userPool = new CognitoUserPool(poolData);
@@ -31,8 +31,8 @@ var params = {
 aws.config.update({
   region: "us-west-2",
   endpoint: "http://DynamoDB.us-west-2.amazonaws.com",
-  accessKeyId: "AKIAZFNKWJXYYBSQCPVF",
-  secretAccessKey: "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"
+  accessKeyId: "AKIAZFNKWJXY5AQXTQH4",
+  secretAccessKey: "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"
 
 });
 
@@ -90,8 +90,12 @@ function otp(userName) {
   })
 }
 
-function confirmNewPassword(otp, password) {
+function confirmNewPassword(otp, password,email) {
   return new Promise((resolve, reject) => {
+    let user = new CognitoUser({
+      Username: email,
+      Pool: userPool // User Pool
+  })
     user.confirmPassword(otp, password, {
       onSuccess(data) {
         // After password is reset
@@ -238,7 +242,7 @@ module.exports.getOtp = async (events)=>{
 module.exports.newPassWord = async (events) => {
   const userData = JSON.parse(events.body);
   try {
-    let code = await confirmNewPassword(userData.otp, userData.password);
+    let code = await confirmNewPassword(userData.otp, userData.password, userData.email);
     console.log(code);
     return {
       statusCode: 200,
@@ -250,7 +254,7 @@ module.exports.newPassWord = async (events) => {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: "code send"
+        message: error
       })
     }
   }

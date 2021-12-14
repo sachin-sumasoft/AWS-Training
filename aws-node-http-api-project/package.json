@@ -3,5 +3,9 @@
     "amazon-cognito-identity-js": "^5.2.3",
     "aws-sdk": "^2.1034.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-offline": "^8.3.1"
   }
 }

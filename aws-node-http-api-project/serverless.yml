@@ -72,47 +72,50 @@ provider:
 #    - include-me.js
 #    - include-me-dir/**
 
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
 functions:
-  create:
-    handler: handler.create
-    events:
-      - httpApi: 
-          path: create
-          method: get
-          cors: true      
+    create:
+       handler: handler.create
+       events:
+        - httpApi: 
+            path: create
+            method: get
+            cors: true      
         
-  getOtp:
-    handler: handler.getOtp
-    events:
-      - http: 
-          path: getOtp
-          method: post
-          cors: true
+    getOtp:
+       handler: handler.getOtp
+       events:
+        - http: 
+            path: getOtp
+            method: post
+            cors: true
 
-   newPassWord:
+    newPassWord:
       handler: handler.newPassWord
       events:
         - http: 
-          path: newPassWord
-          method: post
-          cors: true
+            path: newPassWord
+            method: post
+            cors: true
       
 
     login:
        handler: handler.login
        events:
         - httpApi: 
-          path: login
-          method: post
-          cors: true          
+            path: login
+            method: post
+            cors: true          
        
-     signUp:
+    signUp:
        handler: handler.createUser
        events:
          - http:
-           path: /createUser
-           method: post
-           cors: true
+            path: /createUser
+            method: post
+            cors: true
 
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
